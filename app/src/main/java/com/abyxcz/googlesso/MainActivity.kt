@@ -62,6 +62,9 @@ class MainActivity : ComponentActivity() {
             println("$resultCode $data")
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
+                //TODO:
+                // This error (nullable field) is removed in at least @tasks.18.0.2, bundled version should be updated
+                // And investigate cause of this dependency mismatch
                 val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
                 /* continue with account */
             } catch (e: ApiException) {
