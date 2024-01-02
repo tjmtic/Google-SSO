@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.abyxcz.googlesso"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.abyxcz.googlesso"
