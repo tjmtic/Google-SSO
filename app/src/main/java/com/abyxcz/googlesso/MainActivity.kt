@@ -3,6 +3,7 @@ package com.abyxcz.googlesso
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +20,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class MainActivity : ComponentActivity() {
 
-    private val RC_SIGN_IN = 1234
-    private val GOOGLE_SSO_TOKEN = "your_sign_in_token"
+    companion object {
+        private val RC_SIGN_IN = 1234
+        private val GOOGLE_SSO_TOKEN = "your_sign_in_token"
+        val mFirebaseAuth = FirebaseAuth.getInstance()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -66,10 +72,28 @@ class MainActivity : ComponentActivity() {
                 // This error (nullable field) is removed in at least @tasks.18.0.2, bundled version should be updated
                 // And investigate cause of this dependency mismatch
                 val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
-                /* continue with account */
+                /* continue with Google account */
+                firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
                 Log.w("MainActivity", "Google sign in failed", e)
             }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount?) {
+        acct?.let {
+            val credential = GoogleAuthProvider.getCredential(it.idToken, null)
+            mFirebaseAuth.signInWithCredential(credential)
+                .addOnSuccessListener(this) { authResult ->
+                    /* continue with Firebase User */
+
+                }
+                .addOnFailureListener(this) { e ->
+                    Toast.makeText(
+                        this@MainActivity, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
         }
     }
 }
