@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,14 +41,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             GoogleSSOTheme {
                 // A surface container using the 'background' color from the theme
-                
-                var user = mainViewModel.state.collectAsStateWithLifecycle()
+
+                val state by mainViewModel.state.collectAsStateWithLifecycle()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    when(val user = state.user){
+                        null -> Greeting("Please Log In")
+                        else -> Greeting("Hello ${user.displayName ?: "No Name"}")
+                    }
                 }
             }
         }
@@ -93,8 +97,8 @@ class MainActivity : ComponentActivity() {
             val credential = GoogleAuthProvider.getCredential(it.idToken, null)
             mFirebaseAuth.signInWithCredential(credential)
                 .addOnSuccessListener(this) { authResult ->
-                    /* continue with Firebase User */
-
+                    /* continue logging in with Firebase User */
+                    
                 }
                 .addOnFailureListener(this) { e ->
                     Toast.makeText(
