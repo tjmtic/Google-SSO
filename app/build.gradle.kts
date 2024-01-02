@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.abyxcz.googlesso"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.abyxcz.googlesso"
@@ -66,4 +66,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //Google SSO
+    implementation("com.google.android.gms:play-services-auth:19.0.0")
 }
