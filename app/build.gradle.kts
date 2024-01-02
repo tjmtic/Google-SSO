@@ -77,4 +77,7 @@ dependencies {
     implementation("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    //Compose Lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 }
